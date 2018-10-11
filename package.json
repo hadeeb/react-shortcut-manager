@@ -9,9 +9,18 @@
     "shortcuts"
   ],
   "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "files": [
+    "lib",
+    "src",
+    "es"
+  ],
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
-    "build": "rimraf lib && babel src -d lib",
+    "build": "npm run build:commonjs && npm run build:es",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "clean": "rimraf lib es",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hadeeb Farhan <hadeebfarhan1@gmail.com>",
@@ -19,9 +28,13 @@
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-arrow-functions": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.1.0",
+    "@babel/plugin-transform-react-jsx-compat": "^7.0.0",
+    "@babel/plugin-transform-spread": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",

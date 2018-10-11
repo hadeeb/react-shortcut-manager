@@ -1,5 +1,5 @@
 /**
- * Returns the string an almost unique id appended to it
+ * Returns the string with an almost unique id appended to it
  * @param {String} name
  * @returns {String} String + _ + unique id
  */

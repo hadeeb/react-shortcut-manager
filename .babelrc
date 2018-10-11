@@ -1,3 +1,12 @@
 {
-  "presets": ["@babel/env", "@babel/react"]
+  "plugins": [
+    "@babel/plugin-transform-spread",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-react-jsx-compat"
+  ],
+  "env": {
+    "commonjs": {
+      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+    }
+  }
 }
