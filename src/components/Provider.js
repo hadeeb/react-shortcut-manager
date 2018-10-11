@@ -2,6 +2,8 @@ import React, { Component, Children } from "react";
 import PropTypes from "prop-types";
 
 import getActionFromEvent from "../utils/actionFromEvent";
+import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
+
 class Provider extends Component {
   getChildContext() {
     return {
@@ -12,7 +14,7 @@ class Provider extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.shortcuts = props.shortcuts;
+    this.shortcuts = getShortcutsofPlatform(props.shortcuts);
     this.handleGlobals = this.handleGlobals.bind(this);
     if (props.withGlobals) {
       this.globalFunctions = {};

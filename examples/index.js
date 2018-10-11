@@ -6,10 +6,13 @@ import { ShortcutProvider } from "../src";
 import ChildComponent from "./child";
 const shortcuts = {
   TEST: {
-    UP: "w",
+    UP: {
+      osx: "q",
+      other: "e"
+    },
     DOWN: "s",
     LEFT: "a",
-    RIGHT: "d",
+    RIGHT: ["d", "f"],
     CTRLQ: "Ctrl + q",
     ALTQ: "q + Alt",
     SHIFTQ: "shift+q",

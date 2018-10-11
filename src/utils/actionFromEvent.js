@@ -7,6 +7,13 @@
 export default function getActionFromEvent(actions, event) {
   if (typeof actions !== "object") return null;
   for (let key in actions) {
+    console.log(actions[key]);
+    if (Array.isArray(actions[key])) {
+      for (let action of actions[key]) {
+        if (areEventsEqual(action, event)) return key;
+      }
+      return null;
+    }
     if (areEventsEqual(actions[key], event)) return key;
   }
   return null;
