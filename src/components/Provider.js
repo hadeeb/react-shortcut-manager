@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
+import isInputLike from "../utils/isInputLike";
 
 class Provider extends Component {
   getChildContext() {
@@ -20,13 +21,25 @@ class Provider extends Component {
       this.globalFunctions = {};
     } else this.globalFunctions = null;
   }
-
+  /**
+   * Handle global keyboard event
+   * @param {KeyboardEvent} event
+   */
   handleGlobals(event) {
     for (let key in this.globalFunctions) {
-      const { name, func } = this.globalFunctions[key];
+      const { name } = this.globalFunctions[key];
       const action = getActionFromEvent(this.shortcuts[name], event);
       if (action) {
-        func(action, event);
+        const {
+          handler,
+          stopPropagation,
+          preventDefault,
+          alwaysFire
+        } = this.globalFunctions[key];
+        if (!alwaysFire && isInputLike(event.target)) return;
+        if (preventDefault) event.preventDefault();
+        if (stopPropagation) event.stopPropagation();
+        handler(action, event);
       }
     }
   }

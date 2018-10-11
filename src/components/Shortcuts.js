@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import uniqueID from "../utils/uniqueID";
+import isInputLike from "../utils/isInputLike";
 
 class Shortcuts extends Component {
   constructor(props, context) {
@@ -10,12 +11,20 @@ class Shortcuts extends Component {
     const { name, global } = props;
     this.actions = this.context.shortcuts[name] || "";
     this.shortcutsHandler = this.shortcutsHandler.bind(this);
+    this.uniqueID = uniqueID(name);
     if (global) {
-      this.uniqueID = uniqueID(name);
-      const { handler } = this.props;
+      const {
+        handler,
+        stopPropagation,
+        preventDefault,
+        alwaysFire
+      } = this.props;
       this.context.globalFunctions[this.uniqueID] = {
         name: name,
-        func: handler
+        handler: handler,
+        stopPropagation: stopPropagation,
+        preventDefault: preventDefault,
+        alwaysFire: alwaysFire
       };
     }
   }
@@ -32,7 +41,13 @@ class Shortcuts extends Component {
     if (typeof this.actions !== "object") return;
     const action = getActionFromEvent(this.actions, event);
     if (action) {
-      const { handler, stopPropagation, preventDefault } = this.props;
+      const {
+        handler,
+        stopPropagation,
+        preventDefault,
+        alwaysFire
+      } = this.props;
+      if (!alwaysFire && isInputLike(event.target)) return;
       if (preventDefault) event.preventDefault();
       if (stopPropagation) event.stopPropagation();
       handler(action, event);
@@ -46,6 +61,7 @@ class Shortcuts extends Component {
       preventDefault,
       handler,
       global,
+      alwaysFire,
       ...rest
     } = this.props;
     if (global) {
@@ -70,13 +86,15 @@ Shortcuts.propTypes = {
   global: PropTypes.bool,
   tabIndex: PropTypes.number,
   stopPropagation: PropTypes.bool,
-  preventDefault: PropTypes.bool
+  preventDefault: PropTypes.bool,
+  alwaysFire: PropTypes.bool
 };
 Shortcuts.defaultProps = {
   global: false,
   tabIndex: 0,
   stopPropagation: false,
-  preventDefault: false
+  preventDefault: false,
+  alwaysFire: false
 };
 
 export default Shortcuts;

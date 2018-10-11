@@ -27,6 +27,7 @@ class ChildComponent extends Component {
         <div>{text}</div>
         <div>{this.state.count}</div>
         <div>{this.state.letter}</div>
+        <input />
         <TestComp />
       </Shortcuts>
     );
