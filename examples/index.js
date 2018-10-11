@@ -15,16 +15,19 @@ const shortcuts = {
     SHIFTQ: "shift+q",
     ALTCTRLY: "alt+ctrl+y",
     SPKEY: "/"
+  },
+  GLO: {
+    GLOBAL: "p"
   }
 };
 
 class Example extends Component {
   render() {
     return (
-      <ShortcutProvider shortcuts={shortcuts}>
+      <ShortcutProvider withGlobals={true} shortcuts={shortcuts}>
         <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
           Test1
-          <ChildComponent text="Sample" />
+          <ChildComponent test={shortcuts} text="Sample" />
         </div>
       </ShortcutProvider>
     );

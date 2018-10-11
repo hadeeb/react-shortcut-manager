@@ -1,29 +1,58 @@
-import { Component, Children } from "react";
+import React, { Component, Children } from "react";
 import PropTypes from "prop-types";
 
-export function createProvider(contextKey = "shortcuts") {
-  class Provider extends Component {
-    getChildContext() {
-      return { [contextKey]: this[contextKey] };
-    }
+import getActionFromEvent from "../utils/actionFromEvent";
+class Provider extends Component {
+  getChildContext() {
+    return {
+      shortcuts: this.shortcuts,
+      globalFunctions: this.globalFunctions
+    };
+  }
 
-    constructor(props, context) {
-      super(props, context);
-      this[contextKey] = props.shortcuts;
-    }
+  constructor(props, context) {
+    super(props, context);
+    this.shortcuts = props.shortcuts;
+    this.handleGlobals = this.handleGlobals.bind(this);
+    if (props.withGlobals) {
+      this.globalFunctions = {};
+    } else this.globalFunctions = null;
+  }
 
-    render() {
-      return Children.only(this.props.children);
+  handleGlobals(event) {
+    for (let key in this.globalFunctions) {
+      const { name, func } = this.globalFunctions[key];
+      const action = getActionFromEvent(this.shortcuts[name], event);
+      if (action) {
+        func(action, event);
+      }
     }
   }
-  Provider.propTypes = {
-    shortcuts: PropTypes.object.isRequired,
-    children: PropTypes.element.isRequired
-  };
-  Provider.childContextTypes = {
-    [contextKey]: PropTypes.object.isRequired
-  };
-  return Provider;
-}
 
-export default createProvider();
+  render() {
+    const { withGlobals, shortcuts, tabIndex, ...rest } = this.props;
+    if (withGlobals) {
+      return (
+        <div {...rest} tabIndex={tabIndex} onKeyDown={this.handleGlobals}>
+          {Children.only(this.props.children)}
+        </div>
+      );
+    }
+    return Children.only(this.props.children);
+  }
+}
+Provider.propTypes = {
+  shortcuts: PropTypes.object.isRequired,
+  withGlobals: PropTypes.bool,
+  tabIndex: PropTypes.number
+};
+Provider.defaultProps = {
+  withGlobals: false,
+  tabIndex: 0
+};
+Provider.childContextTypes = {
+  shortcuts: PropTypes.object.isRequired,
+  globalFunctions: PropTypes.object
+};
+
+export default Provider;

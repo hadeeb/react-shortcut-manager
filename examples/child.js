@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Shortcuts } from "../src";
+
+import TestComp from "./gchild";
 class ChildComponent extends Component {
   constructor() {
     super();
@@ -15,14 +17,17 @@ class ChildComponent extends Component {
     });
   }
   render() {
+    const { text } = this.props;
     return (
       <Shortcuts
         name="TEST"
         handler={this.handle_keys}
         style={{ width: "100%", height: "100%" }}
       >
+        <div>{text}</div>
         <div>{this.state.count}</div>
         <div>{this.state.letter}</div>
+        <TestComp />
       </Shortcuts>
     );
   }
