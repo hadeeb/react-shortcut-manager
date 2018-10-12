@@ -1,5 +1,5 @@
 {
-  "name": "synthetic-shortcuts",
+  "name": "react-shortcut-manager",
   "version": "0.0.1",
   "description": "Keyboard shortcuts for React",
   "keywords": [
@@ -21,6 +21,7 @@
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "clean": "rimraf lib es",
+    "prepublish": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hadeeb Farhan <hadeebfarhan1@gmail.com>",

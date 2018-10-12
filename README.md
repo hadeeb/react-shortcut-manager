@@ -4,8 +4,14 @@ React Keyboard shortcuts using React's synthetic events.
 
 ## Usage
 
+```
+npm i react-shortcut-manager
+OR
+yarn add react-shortcut-manager
+```
+
 ```js
-import { ShortcutsProvider } from "...";
+import { ShortcutsProvider } from "react-shortcut-manager";
 
 const keymap = {
   TODO_LIST: {
@@ -26,7 +32,7 @@ class App extends React.Component {
 ```
 
 ```js
-import { Shortcuts } from "...";
+import { Shortcuts } from "react-shortcut-manager";
 
 class InnerChild extends React.Component{
   handleShortcuts(action,event){
