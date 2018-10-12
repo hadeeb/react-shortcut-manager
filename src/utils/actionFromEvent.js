@@ -1,3 +1,4 @@
+import specialkeys from "./specialkeys";
 /**
  * Get matching action from a set of actions, given a keyboard event
  * @param {Object} actions
@@ -11,9 +12,7 @@ export default function getActionFromEvent(actions, event) {
       for (let action of actions[key]) {
         if (areEventsEqual(action, event)) return key;
       }
-      return null;
-    }
-    if (areEventsEqual(actions[key], event)) return key;
+    } else if (areEventsEqual(actions[key], event)) return key;
   }
   return null;
 }
@@ -42,7 +41,12 @@ export function areEventsEqual(accelerator, event) {
       case "CTRL":
         return event.ctrlKey;
       default:
-        return key.charCodeAt() === event.keyCode;
+        if (key.length === 1 && key >= "A" && key <= "Z")
+          return key.charCodeAt() === event.keyCode;
+        return (
+          specialkeys[event.keyCode] &&
+          specialkeys[event.keyCode].toUpperCase() === key
+        );
     }
   });
 }

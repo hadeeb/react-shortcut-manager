@@ -56,6 +56,7 @@ class Shortcuts extends Component {
   render() {
     const {
       children,
+      name,
       tabIndex,
       stopPropagation,
       preventDefault,

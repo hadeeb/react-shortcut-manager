@@ -19,11 +19,7 @@ class ChildComponent extends Component {
   render() {
     const { text } = this.props;
     return (
-      <Shortcuts
-        name="TEST"
-        handler={this.handle_keys}
-        style={{ width: "100%", height: "100%" }}
-      >
+      <Shortcuts name="TEST" handler={this.handle_keys}>
         <div>{text}</div>
         <div>{this.state.count}</div>
         <div>{this.state.letter}</div>

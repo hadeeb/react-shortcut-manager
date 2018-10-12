@@ -8,16 +8,17 @@ const shortcuts = {
   TEST: {
     UP: {
       osx: "q",
-      other: "e"
+      other: ["w", "up"]
     },
-    DOWN: "s",
-    LEFT: "a",
-    RIGHT: ["d", "f"],
+    DOWN: ["s", "down"],
+    LEFT: ["a", "left"],
+    RIGHT: ["d", "right"],
     CTRLQ: "Ctrl + q",
     ALTQ: "q + Alt",
     SHIFTQ: "shift+q",
     ALTCTRLY: "alt+ctrl+y",
-    SPKEY: "/"
+    CTRLENTER: "ctrl+enter",
+    DELETE: "del"
   },
   GLO: {
     GLOBAL: "p"
@@ -28,7 +29,7 @@ class Example extends Component {
   render() {
     return (
       <ShortcutProvider withGlobals={true} shortcuts={shortcuts}>
-        <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
+        <div style={{ width: "100vw", height: "100vh" }}>
           Test1
           <ChildComponent test={shortcuts} text="Sample" />
         </div>
