@@ -5,14 +5,9 @@ import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
 import isInputLike from "../utils/isInputLike";
 
-class Provider extends Component {
-  getChildContext() {
-    return {
-      shortcuts: this.shortcuts,
-      globalFunctions: this.globalFunctions
-    };
-  }
+import { ContextProvider } from "./Context";
 
+class Provider extends Component {
   constructor(props, context) {
     super(props, context);
     this.shortcuts = getShortcutsofPlatform(props.shortcuts);
@@ -20,6 +15,11 @@ class Provider extends Component {
     if (props.withGlobals) {
       this.globalFunctions = {};
     } else this.globalFunctions = null;
+
+    this.contextValue = {
+      shortcuts: this.shortcuts,
+      globalFunctions: this.globalFunctions
+    };
   }
   /**
    * Handle global keyboard event
@@ -49,11 +49,17 @@ class Provider extends Component {
     if (withGlobals) {
       return (
         <div {...rest} tabIndex={tabIndex} onKeyDown={this.handleGlobals}>
-          {Children.only(this.props.children)}
+          <ContextProvider value={this.contextValue}>
+            {Children.only(this.props.children)}
+          </ContextProvider>
         </div>
       );
     }
-    return Children.only(this.props.children);
+    return (
+      <ContextProvider value={this.contextValue}>
+        {Children.only(this.props.children)}
+      </ContextProvider>
+    );
   }
 }
 Provider.propTypes = {
@@ -64,10 +70,6 @@ Provider.propTypes = {
 Provider.defaultProps = {
   withGlobals: false,
   tabIndex: 0
-};
-Provider.childContextTypes = {
-  shortcuts: PropTypes.object.isRequired,
-  globalFunctions: PropTypes.object
 };
 
 export default Provider;

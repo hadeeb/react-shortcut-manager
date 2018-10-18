@@ -1,15 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import uniqueID from "../utils/uniqueID";
 import isInputLike from "../utils/isInputLike";
 
+import { ContextConsumer } from "./Context";
+
 class Shortcuts extends Component {
   constructor(props, context) {
     super(props, context);
-    const { name, global } = props;
-    this.actions = this.context.shortcuts[name] || "";
+    const { name, global, shortcuts, globalFunctions } = props;
+    this.actions = shortcuts[name] || "";
     this.shortcutsHandler = this.shortcutsHandler.bind(this);
     this.uniqueID = uniqueID(name);
     if (global) {
@@ -19,7 +21,7 @@ class Shortcuts extends Component {
         preventDefault,
         alwaysFire
       } = this.props;
-      this.context.globalFunctions[this.uniqueID] = {
+      globalFunctions[this.uniqueID] = {
         name: name,
         handler: handler,
         stopPropagation: stopPropagation,
@@ -30,7 +32,7 @@ class Shortcuts extends Component {
   }
 
   componentWillUnmount() {
-    delete this.context.globalFunctions[this.uniqueID];
+    delete this.props.globalFunctions[this.uniqueID];
   }
 
   /**
@@ -63,13 +65,25 @@ class Shortcuts extends Component {
       handler,
       global,
       alwaysFire,
+      forwardedRef,
+      shortcuts,
+      globalFunctions,
       ...rest
     } = this.props;
     if (global) {
-      return <div {...rest}>{children}</div>;
+      return (
+        <div {...rest} ref={forwardedRef}>
+          {children}
+        </div>
+      );
     }
     return (
-      <div {...rest} tabIndex={tabIndex} onKeyDown={this.shortcutsHandler}>
+      <div
+        {...rest}
+        tabIndex={tabIndex}
+        onKeyDown={this.shortcutsHandler}
+        ref={forwardedRef}
+      >
         {children}
       </div>
     );
@@ -82,13 +96,16 @@ Shortcuts.contextTypes = {
 };
 
 Shortcuts.propTypes = {
+  shortcuts: PropTypes.object.isRequired,
+  globalFunctions: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   handler: PropTypes.func.isRequired,
   global: PropTypes.bool,
   tabIndex: PropTypes.number,
   stopPropagation: PropTypes.bool,
   preventDefault: PropTypes.bool,
-  alwaysFire: PropTypes.bool
+  alwaysFire: PropTypes.bool,
+  forwardedRef: PropTypes.object
 };
 Shortcuts.defaultProps = {
   global: false,
@@ -98,4 +115,19 @@ Shortcuts.defaultProps = {
   alwaysFire: false
 };
 
-export default Shortcuts;
+export default forwardRef((props, ref) => {
+  return (
+    <ContextConsumer>
+      {({ shortcuts, globalFunctions }) => (
+        <Shortcuts
+          {...props}
+          forwardedRef={ref}
+          shortcuts={shortcuts}
+          globalFunctions={globalFunctions}
+        >
+          {props.children}
+        </Shortcuts>
+      )}
+    </ContextConsumer>
+  );
+});
