@@ -1,5 +1,6 @@
 import React, { Component, forwardRef } from "react";
 import PropTypes from "prop-types";
+import invariant from "invariant";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import uniqueID from "../utils/uniqueID";
@@ -14,6 +15,11 @@ class Shortcuts extends Component {
     this.actions = shortcuts[name] || "";
     this.shortcutsHandler = this.shortcutsHandler.bind(this);
     this.uniqueID = uniqueID(name);
+    invariant(
+      !global || globalFunctions,
+      `To use global shortcuts,` +
+        ` The root Provider component should have a prop withGlobal={true}`
+    );
     if (global) {
       const {
         handler,
@@ -97,7 +103,7 @@ Shortcuts.contextTypes = {
 
 Shortcuts.propTypes = {
   shortcuts: PropTypes.object.isRequired,
-  globalFunctions: PropTypes.object.isRequired,
+  globalFunctions: PropTypes.object,
   name: PropTypes.string.isRequired,
   handler: PropTypes.func.isRequired,
   global: PropTypes.bool,
