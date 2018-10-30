@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Shortcuts } from "../src";
 
 import TestComp from "./gchild";
+import ArrowNav from "./arrownav";
+
 class ChildComponent extends Component {
   constructor() {
     super();
@@ -25,6 +27,7 @@ class ChildComponent extends Component {
         <div>{this.state.letter}</div>
         <input />
         <TestComp />
+        <ArrowNav />
       </Shortcuts>
     );
   }

@@ -5,6 +5,12 @@ import { ShortcutProvider } from "../src";
 
 import ChildComponent from "./child";
 const shortcuts = {
+  NAV: {
+    UP: "up",
+    DOWN: "down",
+    LEFT: "left",
+    RIGHT: "right"
+  },
   TEST: {
     UP: {
       osx: "q",
@@ -28,7 +34,11 @@ const shortcuts = {
 class Example extends Component {
   render() {
     return (
-      <ShortcutProvider withGlobals={true} shortcuts={shortcuts}>
+      <ShortcutProvider
+        withGlobals={true}
+        shortcuts={shortcuts}
+        style={{ display: `contents` }}
+      >
         <div style={{ width: "100vw", height: "100vh" }}>
           Test1
           <ChildComponent test={shortcuts} text="Sample" />
