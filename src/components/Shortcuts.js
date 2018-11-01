@@ -1,4 +1,4 @@
-import React, { Component, forwardRef } from "react";
+import React, { PureComponent, forwardRef } from "react";
 import PropTypes from "prop-types";
 import invariant from "invariant";
 
@@ -8,7 +8,7 @@ import isInputLike from "../utils/isInputLike";
 
 import { ContextConsumer } from "./Context";
 
-class Shortcuts extends Component {
+class Shortcuts extends PureComponent {
   constructor(props, context) {
     super(props, context);
     const { name, global, shortcuts, globalFunctions } = props;

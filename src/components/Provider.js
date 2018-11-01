@@ -8,8 +8,8 @@ import isInputLike from "../utils/isInputLike";
 import { ContextProvider } from "./Context";
 
 class Provider extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.shortcuts = getShortcutsofPlatform(props.shortcuts);
     this.handleGlobals = this.handleGlobals.bind(this);
     if (props.withGlobals) {

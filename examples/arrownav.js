@@ -6,7 +6,7 @@ class ArrowNav extends Component {
     super();
     this.childRef = createRef();
     this.handleKeys = this.handleKeys.bind(this);
-    this.state = { active: 0 };
+    this.state = { active: 0, children: null };
   }
   handleKeys(action, event) {
     event.stopPropagation();
@@ -14,21 +14,28 @@ class ArrowNav extends Component {
     const count = Children.count(children);
     switch (action) {
       case "UP":
-        this.setState(({ active }) => ({
-          active: (active - 1 + count) % count
-        }));
+        this.setState(({ active }) => {
+          const newActive = (active - 1 + count) % count;
+          return {
+            active: newActive,
+            children: this.renderChildren(newActive)
+          };
+        });
         break;
       case "DOWN":
-        this.setState(({ active }) => ({
-          active: (active + 1) % count
-        }));
+        this.setState(({ active }) => {
+          const newActive = (active + 1) % count;
+          return {
+            active: newActive,
+            children: this.renderChildren(newActive)
+          };
+        });
         break;
     }
   }
 
-  renderChildren() {
+  renderChildren(active) {
     const { children } = this.props;
-    const { active } = this.state;
     return Children.map(children, (child, index) =>
       cloneElement(child, {
         tabIndex:
@@ -49,10 +56,14 @@ class ArrowNav extends Component {
       }
     }
   }
+
+  componentDidMount() {
+    this.setState({ children: this.renderChildren(0) });
+  }
   render() {
     return (
       <Shortcuts ref={this.childRef} name="NAV" handler={this.handleKeys}>
-        {this.renderChildren()}
+        {this.state.children}
       </Shortcuts>
     );
   }
