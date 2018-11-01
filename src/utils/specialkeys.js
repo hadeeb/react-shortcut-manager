@@ -38,5 +38,5 @@ for (var i = 1; i < 20; ++i) {
  * loop through to map numbers on the numeric keypad
  */
 for (i = 0; i <= 9; ++i) {
-  module.exports[i + 96] = i;
+  module.exports[i + 96] = `${i}`;
 }
