@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render } from "react-testing-library";
-import Provider from "../../src/components/Provider";
+import Provider from "components/Provider";
 
 describe("Provider", () => {
   afterEach(cleanup);

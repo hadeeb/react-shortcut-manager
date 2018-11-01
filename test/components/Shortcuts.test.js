@@ -1,8 +1,8 @@
 import React, { Component, Children, createRef } from "react";
 import { cleanup, render, fireEvent } from "react-testing-library";
-import Shortcuts from "../../src/components/Shortcuts";
-import { ContextProvider } from "../../src/components/Context";
-import getActionFromEvent from "../../src/utils/actionFromEvent";
+import Shortcuts from "components/Shortcuts";
+import { ContextProvider } from "components/Context";
+import getActionFromEvent from "utils/actionFromEvent";
 
 import mockKeymap from "../__mocks__/keymap";
 
