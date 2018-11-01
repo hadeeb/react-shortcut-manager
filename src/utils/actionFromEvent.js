@@ -30,16 +30,35 @@ export function areEventsEqual(accelerator, event) {
     .map(key => key.trim());
 
   if (event.shiftKey && !keys.includes("SHIFT")) return false;
-  if (event.altKey && !keys.includes("ALT")) return false;
+  if (event.altKey && !(keys.includes("ALT") || keys.includes("OPTION")))
+    return false;
   if (event.ctrlKey && !keys.includes("CTRL")) return false;
+  if (
+    event.metaKey &&
+    !(
+      keys.includes("META") ||
+      keys.includes("CMD") ||
+      keys.includes("COMMAND") ||
+      keys.includes("SUPER") ||
+      keys.includes("WIN")
+    )
+  )
+    return false;
   return keys.every(key => {
     switch (key) {
       case "SHIFT":
         return event.shiftKey;
-      case "ALT":
-        return event.altKey;
       case "CTRL":
         return event.ctrlKey;
+      case "ALT":
+      case "OPTION":
+        return event.altKey;
+      case "META":
+      case "CMD":
+      case "COMMAND":
+      case "SUPER":
+      case "WIN":
+        return event.metaKey;
       default:
         if (key.length === 1 && key >= "A" && key <= "Z")
           return key.charCodeAt() === event.keyCode;
