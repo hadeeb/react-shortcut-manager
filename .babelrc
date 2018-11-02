@@ -1,15 +1,9 @@
 {
-  "plugins": [
-    "@babel/plugin-transform-spread",
-    "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-transform-react-jsx"
-  ],
+  "presets": ["@babel/env"],
+  "plugins": ["@babel/plugin-transform-react-jsx"],
   "env": {
     "commonjs": {
-      "plugins": ["@babel/plugin-transform-modules-commonjs"]
-    },
-    "test": {
-      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      "plugins": ["@babel/transform-runtime"]
     }
   }
 }
