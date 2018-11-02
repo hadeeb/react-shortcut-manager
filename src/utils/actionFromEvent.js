@@ -60,8 +60,7 @@ export function areEventsEqual(accelerator, event) {
       case "WIN":
         return event.metaKey;
       default:
-        if (key.length === 1 && key >= "A" && key <= "Z")
-          return key.charCodeAt() === event.keyCode;
+        if (key.length === 1 && key.charCodeAt() === event.keyCode) return true;
         return (
           specialkeys[event.keyCode] &&
           specialkeys[event.keyCode].toUpperCase() === key
