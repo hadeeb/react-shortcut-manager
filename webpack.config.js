@@ -12,15 +12,22 @@ module.exports = {
     filename: "bundle.js",
     path: `${__dirname}/examples/build`
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"]
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.t|jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: [
+              "@babel/preset-typescript",
+              "@babel/preset-env",
+              "@babel/preset-react"
+            ],
             babelrc: false
           }
         }

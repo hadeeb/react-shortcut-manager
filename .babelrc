@@ -5,7 +5,8 @@
   ],
   "plugins": [
     "@babel/plugin-transform-react-jsx",
-    ["@babel/transform-runtime", { "useESModules": true }]
+    ["@babel/transform-runtime", { "useESModules": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ],
   "env": {
     "commonjs": {
