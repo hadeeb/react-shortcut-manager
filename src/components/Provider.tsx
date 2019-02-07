@@ -1,5 +1,4 @@
 import React, { Component, Children, KeyboardEvent } from "react";
-import PropTypes from "prop-types";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
