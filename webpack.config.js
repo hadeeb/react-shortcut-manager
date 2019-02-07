@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -23,12 +25,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [
-              "@babel/preset-typescript",
-              "@babel/preset-env",
-              "@babel/preset-react"
-            ],
-            babelrc: false
+            ...JSON.parse(fs.readFileSync(path.resolve(__dirname, ".babelrc")))
           }
         }
       }
