@@ -1,16 +1,39 @@
-import React, { PureComponent, forwardRef } from "react";
-import PropTypes from "prop-types";
+import React, { PureComponent, forwardRef, Ref, KeyboardEvent } from "react";
 import invariant from "invariant";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import uniqueID from "../utils/uniqueID";
 import isInputLike from "../utils/isInputLike";
 
-import { ContextConsumer } from "./Context";
+import { ContextConsumer, contextType } from "./Context";
 
-class Shortcuts extends PureComponent {
-  constructor(props, context) {
-    super(props, context);
+interface ShortcutsProps {
+  name: string;
+  handler: (action?: string, event?: React.KeyboardEvent<HTMLElement>) => void;
+  global: boolean;
+  tabIndex: number;
+  stopPropagation: boolean;
+  preventDefault: boolean;
+  alwaysFire: boolean;
+  forwardedRef: Ref<HTMLDivElement>;
+}
+
+interface InternalProps extends ShortcutsProps, contextType {}
+
+class Shortcuts extends PureComponent<InternalProps> {
+  actions: Object;
+  uniqueID: string;
+
+  static defaultProps = {
+    global: false,
+    tabIndex: 0,
+    stopPropagation: false,
+    preventDefault: false,
+    alwaysFire: false
+  };
+
+  constructor(props: InternalProps) {
+    super(props);
     const { name, global, shortcuts, globalFunctions } = props;
     this.actions = shortcuts[name] || "";
     this.shortcutsHandler = this.shortcutsHandler.bind(this);
@@ -45,7 +68,7 @@ class Shortcuts extends PureComponent {
    * Handle keyboard event
    * @param {KeyboardEvent} event
    */
-  shortcutsHandler(event) {
+  shortcutsHandler(event: KeyboardEvent<HTMLDivElement>) {
     if (typeof this.actions !== "object") return;
     const action = getActionFromEvent(this.actions, event);
     if (action) {
@@ -55,7 +78,7 @@ class Shortcuts extends PureComponent {
         preventDefault,
         alwaysFire
       } = this.props;
-      if (!alwaysFire && isInputLike(event.target)) return;
+      if (!alwaysFire && isInputLike(event.target as HTMLElement)) return;
       if (preventDefault) event.preventDefault();
       if (stopPropagation) event.stopPropagation();
       handler(action, event);
@@ -96,32 +119,7 @@ class Shortcuts extends PureComponent {
   }
 }
 
-Shortcuts.contextTypes = {
-  shortcuts: PropTypes.object,
-  globalFunctions: PropTypes.object
-};
-
-Shortcuts.propTypes = {
-  shortcuts: PropTypes.object.isRequired,
-  globalFunctions: PropTypes.object,
-  name: PropTypes.string.isRequired,
-  handler: PropTypes.func.isRequired,
-  global: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  stopPropagation: PropTypes.bool,
-  preventDefault: PropTypes.bool,
-  alwaysFire: PropTypes.bool,
-  forwardedRef: PropTypes.object
-};
-Shortcuts.defaultProps = {
-  global: false,
-  tabIndex: 0,
-  stopPropagation: false,
-  preventDefault: false,
-  alwaysFire: false
-};
-
-export default forwardRef((props, ref) => {
+export default forwardRef<HTMLDivElement, ShortcutsProps>((props, ref) => {
   return (
     <ContextConsumer>
       {({ shortcuts, globalFunctions }) => (

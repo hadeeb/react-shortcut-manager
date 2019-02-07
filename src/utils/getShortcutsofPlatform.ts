@@ -1,23 +1,26 @@
 import platform from "platform";
+
+import { Action, ActionGroup, Keymap } from "./types";
+
 /**
  *
  * @param {Object} keymap
  * @returns {Object} Keymap for current platform
  */
-export default function getShortcutsofPlatform(keymap) {
+export default function getShortcutsofPlatform(keymap: Keymap): Keymap {
   const platformName = getPlatformName();
 
   return transformShortcuts(platformName, keymap);
 }
 
-function transformShortcuts(platformName, keymap) {
+function transformShortcuts(platformName: string, keymap: Keymap): Keymap {
   const transformedKeymap = {};
   for (let name of Object.keys(keymap)) {
     const transformedKeygroup = {};
     const keygroup = keymap[name];
 
     for (let shortcutname of Object.keys(keygroup)) {
-      let transformedKeys = false;
+      let transformedKeys: Action = void 0;
       const key = keygroup[shortcutname];
 
       if (key) {
@@ -26,7 +29,8 @@ function transformShortcuts(platformName, keymap) {
         } else transformedKeys = key;
       }
 
-      if (transformedKeys) transformedKeygroup[shortcutname] = transformedKeys;
+      if (transformedKeys !== void 0)
+        transformedKeygroup[shortcutname] = transformedKeys;
     }
     if (Object.keys(transformedKeygroup).length > 0)
       transformedKeymap[name] = transformedKeygroup;
@@ -35,13 +39,13 @@ function transformShortcuts(platformName, keymap) {
   return transformedKeymap;
 }
 
-function getShortcut(object, platform) {
+function getShortcut(object: ActionGroup, platform: string) {
   if (object[platform]) return object[platform];
   else if (object.other) return object.other;
   else return "";
 }
 
-function getPlatformName() {
+function getPlatformName(): string {
   let os = platform.os.family || "";
   os = os.toLowerCase().replace(/ /g, "");
   if (/\bwin/.test(os)) {

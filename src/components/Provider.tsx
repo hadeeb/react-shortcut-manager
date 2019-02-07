@@ -1,5 +1,4 @@
-import React, { Component, Children } from "react";
-import PropTypes from "prop-types";
+import React, { Component, Children, KeyboardEvent } from "react";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
@@ -7,8 +6,26 @@ import isInputLike from "../utils/isInputLike";
 
 import { ContextProvider } from "./Context";
 
-class Provider extends Component {
-  constructor(props) {
+import { Keymap } from "../utils/types";
+import { contextType, globalFunctionsType } from "./Context";
+
+interface ProviderProps {
+  shortcuts: Keymap;
+  withGlobals: boolean;
+  tabIndex: number;
+}
+
+class Provider extends Component<ProviderProps> {
+  shortcuts: Keymap;
+  globalFunctions: globalFunctionsType;
+  contextValue: contextType;
+
+  static defaultProps = {
+    withGlobals: false,
+    tabIndex: 0
+  };
+
+  constructor(props: ProviderProps) {
     super(props);
     this.shortcuts = getShortcutsofPlatform(props.shortcuts);
     this.handleGlobals = this.handleGlobals.bind(this);
@@ -25,7 +42,7 @@ class Provider extends Component {
    * Handle global keyboard event
    * @param {KeyboardEvent} event
    */
-  handleGlobals(event) {
+  handleGlobals(event: KeyboardEvent<HTMLElement>) {
     for (let key in this.globalFunctions) {
       const { name } = this.globalFunctions[key];
       const action = getActionFromEvent(this.shortcuts[name], event);
@@ -36,7 +53,7 @@ class Provider extends Component {
           preventDefault,
           alwaysFire
         } = this.globalFunctions[key];
-        if (!alwaysFire && isInputLike(event.target)) return;
+        if (!alwaysFire && isInputLike(event.target as HTMLElement)) return;
         if (preventDefault) event.preventDefault();
         if (stopPropagation) event.stopPropagation();
         handler(action, event);
@@ -62,14 +79,5 @@ class Provider extends Component {
     );
   }
 }
-Provider.propTypes = {
-  shortcuts: PropTypes.object.isRequired,
-  withGlobals: PropTypes.bool,
-  tabIndex: PropTypes.number
-};
-Provider.defaultProps = {
-  withGlobals: false,
-  tabIndex: 0
-};
 
 export default Provider;

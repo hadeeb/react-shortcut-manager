@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -12,16 +14,18 @@ module.exports = {
     filename: "bundle.js",
     path: `${__dirname}/examples/build`
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"]
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.t|jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
-            babelrc: false
+            ...JSON.parse(fs.readFileSync(path.resolve(__dirname, ".babelrc")))
           }
         }
       }

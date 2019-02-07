@@ -3,9 +3,7 @@
  * @param {String} name
  * @returns {String} String + _ + unique id
  */
-export default function ID(name = "") {
-  if (typeof name === "object")
-    throw "The parameter should be of primitive data type";
+export default function ID(name: string = ""): string {
   return (
     name +
     "_" +

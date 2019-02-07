@@ -1,4 +1,4 @@
-module.exports = {
+let keys: Keys = {
   8: "backspace",
   9: "tab",
   13: "enter",
@@ -31,12 +31,18 @@ module.exports = {
  * programatically
  */
 for (var i = 1; i < 20; ++i) {
-  module.exports[111 + i] = "f" + i;
+  keys[111 + i] = "f" + i;
 }
 
 /**
  * loop through to map numbers on the numeric keypad
  */
 for (i = 0; i <= 9; ++i) {
-  module.exports[i + 96] = `${i}`;
+  keys[i + 96] = `${i}`;
 }
+
+type Keys = {
+  [index: number]: string;
+};
+
+export default keys;

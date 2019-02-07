@@ -1,3 +1,4 @@
+import { KeyboardEvent } from "react";
 import specialkeys from "./specialkeys";
 /**
  * Get matching action from a set of actions, given a keyboard event
@@ -5,7 +6,10 @@ import specialkeys from "./specialkeys";
  * @param {KeyboardEvent} event
  * @returns {String|null} The action if it exists or null
  */
-export default function getActionFromEvent(actions, event) {
+export default function getActionFromEvent(
+  actions: Object,
+  event: KeyboardEvent
+): string {
   if (typeof actions !== "object") return null;
   for (let key in actions) {
     if (Array.isArray(actions[key])) {
@@ -23,7 +27,7 @@ export default function getActionFromEvent(actions, event) {
  * @param {KeyboardEvent} event
  * @returns {Boolean}
  */
-export function areEventsEqual(accelerator, event) {
+export function areEventsEqual(accelerator: string, event: KeyboardEvent) {
   const keys = accelerator
     .toUpperCase()
     .split("+")
@@ -60,7 +64,8 @@ export function areEventsEqual(accelerator, event) {
       case "WIN":
         return event.metaKey;
       default:
-        if (key.length === 1 && key.charCodeAt() === event.keyCode) return true;
+        if (key.length === 1 && key.charCodeAt(0) === event.keyCode)
+          return true;
         return (
           specialkeys[event.keyCode] &&
           specialkeys[event.keyCode].toUpperCase() === key

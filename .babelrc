@@ -1,9 +1,16 @@
 {
-  "presets": ["@babel/env"],
-  "plugins": ["@babel/plugin-transform-react-jsx"],
+  "presets": [
+    ["@babel/preset-typescript", { "loose": true, "modules": false }],
+    ["@babel/env", { "loose": true, "modules": false }]
+  ],
+  "plugins": [
+    "@babel/plugin-transform-react-jsx",
+    ["@babel/transform-runtime", { "useESModules": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ],
   "env": {
     "commonjs": {
-      "plugins": ["@babel/transform-runtime"]
+      "plugins": [["@babel/transform-runtime", { "useESModules": false }]]
     }
   }
 }

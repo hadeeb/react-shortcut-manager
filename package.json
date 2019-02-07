@@ -17,11 +17,12 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
-    "build": "npm run build:commonjs && npm run build:es",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build": "yarn build:commonjs && yarn build:es",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --extensions '.ts','.tsx'",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --extensions '.ts','.tsx'",
+    "types": "tsc",
     "clean": "rimraf lib es",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepublishOnly": "yarn clean && yarn build",
     "test": "jest"
   },
   "author": "Hadeeb Farhan <hadeebfarhan1@gmail.com>",
@@ -29,21 +30,27 @@
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-transform-react-jsx": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/platform": "^1.3.1",
+    "@types/react": "^16.7.18",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "cross-env": "^5.2.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
-    "jest-dom": "^2.1.0",
+    "jest-dom": "^3.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-testing-library": "^5.2.0",
     "rimraf": "^2.6.2",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"
@@ -51,8 +58,7 @@
   "dependencies": {
     "@babel/runtime": "^7.1.2",
     "invariant": "^2.2.4",
-    "platform": "^1.3.5",
-    "prop-types": "^15.6.2"
+    "platform": "^1.3.5"
   },
   "peerDependencies": {
     "react": "^16.4.0"
