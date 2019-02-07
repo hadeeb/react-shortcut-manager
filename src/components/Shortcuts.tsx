@@ -1,4 +1,10 @@
-import React, { PureComponent, forwardRef, Ref, KeyboardEvent } from "react";
+import React, {
+  PureComponent,
+  forwardRef,
+  Ref,
+  KeyboardEvent,
+  Children
+} from "react";
 import invariant from "invariant";
 
 import getActionFromEvent from "../utils/actionFromEvent";
@@ -11,6 +17,7 @@ interface ShortcutsProps {
   name: string;
   handler: (action?: string, event?: React.KeyboardEvent<HTMLElement>) => void;
   global: boolean;
+  headless: boolean;
   tabIndex: number;
   stopPropagation: boolean;
   preventDefault: boolean;
@@ -26,6 +33,7 @@ class Shortcuts extends PureComponent<InternalProps> {
 
   static defaultProps = {
     global: false,
+    headless: false,
     tabIndex: 0,
     stopPropagation: false,
     preventDefault: false,
@@ -93,6 +101,7 @@ class Shortcuts extends PureComponent<InternalProps> {
       preventDefault,
       handler,
       global,
+      headless,
       alwaysFire,
       forwardedRef,
       shortcuts,
@@ -100,6 +109,7 @@ class Shortcuts extends PureComponent<InternalProps> {
       ...rest
     } = this.props;
     if (global) {
+      if (headless) return Children.only(children);
       return (
         <div {...rest} ref={forwardedRef}>
           {children}

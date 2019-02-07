@@ -6,7 +6,7 @@ React Keyboard shortcuts using React's synthetic events.
 
 Install `react-shortcut-manager`
 
-```
+```bash
 npm i react-shortcut-manager
 OR
 yarn add react-shortcut-manager
@@ -14,7 +14,7 @@ yarn add react-shortcut-manager
 
 ## Define shortcuts
 
-**Keymap definition**
+### Keymap definition
 
 ```json
 {
@@ -37,7 +37,7 @@ yarn add react-shortcut-manager
   specifies platform differences (Windows, OSX, Linux, other). The
   shortcut may be composed of single keys (`a`, `6`,…) or combinations of a key and modifiers (`command+shift+k`).
 
-##### Example `keymap` definition:
+#### Example `keymap` definition
 
 ```javascript
 export default {
@@ -124,6 +124,7 @@ class TodoList extends React.Component{
 | name            | _Required_    | name of the keygroup                                                                                                                                                                                  |
 | handler         | _Required_    | The function to handle keyboard events.<br/>Receieves 2 parameters<br/><ul><li>`action:String` : The action being fired</li><li>`event:KeyboardEvent`:The keyboard event invoked the action</li></ul> |
 | global          | false         | Whether the current shortcuts are global or not                                                                                                                                                       |
+| headless        | false         | Applicable only when `global=true`<br/>Whether to render a container `div` or not.                                                                                                                    |
 | tabIndex        | 0             | tabIndex of the element                                                                                                                                                                               |
 | stopPropagation | false         | Whether to `stopPropagation` for all of the current actions<br/>\*Can be done in handler function also                                                                                                |
 | preventDefault  | false         | Whether to `preventDefault` for all of the current actions<br/>\*Can be done in handler function also                                                                                                 |
