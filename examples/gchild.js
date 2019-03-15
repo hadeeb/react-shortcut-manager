@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Shortcuts } from "../src";
 
 class TestComponent extends Component {
-  handle_keys(action, event) {
+  handle_keys(action) {
     console.log(action);
   }
   render() {
@@ -10,6 +10,7 @@ class TestComponent extends Component {
       <Shortcuts name="GLO" handler={this.handle_keys} global={true}>
         <div>zxcv</div>
         <div>asdf</div>
+        {/* <Shortcuts /> */}
       </Shortcuts>
     );
   }

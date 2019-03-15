@@ -1,5 +1,6 @@
 import React from "react";
 import { cleanup, render } from "react-testing-library";
+
 import Provider from "components/Provider";
 
 describe("Provider", () => {

@@ -1,4 +1,4 @@
-let keys: Keys = {
+let keys = {
   8: "backspace",
   9: "tab",
   13: "enter",
@@ -40,9 +40,5 @@ for (var i = 1; i < 20; ++i) {
 for (i = 0; i <= 9; ++i) {
   keys[i + 96] = `${i}`;
 }
-
-type Keys = {
-  [index: number]: string;
-};
 
 export default keys;

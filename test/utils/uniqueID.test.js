@@ -30,8 +30,4 @@ describe("UniqueID function", () => {
       expect(u1).not.toEqual(u2);
     });
   });
-
-  it("should throw when an object is passed", () => {
-    expect(() => UniqueID({})).toThrow();
-  });
 });

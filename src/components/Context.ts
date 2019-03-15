@@ -1,5 +1,6 @@
 import { createContext, Context as ReactContext } from "react";
 
+import { handlerFunction, options } from "./Shortcuts";
 import { Keymap } from "../utils/types";
 
 export type contextType = {
@@ -10,11 +11,8 @@ export type contextType = {
 export type globalFunctionsType = {
   [key: string]: {
     name: string;
-    handler: Function;
-    stopPropagation: boolean;
-    preventDefault: boolean;
-    alwaysFire: boolean;
-  };
+    handler: handlerFunction;
+  } & options;
 };
 
 const Context: ReactContext<contextType> = createContext(null);

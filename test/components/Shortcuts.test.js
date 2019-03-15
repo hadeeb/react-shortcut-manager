@@ -1,8 +1,10 @@
 import React, { Component, Children, createRef } from "react";
 import { cleanup, render, fireEvent } from "react-testing-library";
+
 import Shortcuts from "components/Shortcuts";
+
 import { ContextProvider } from "components/Context";
-import getActionFromEvent from "utils/actionFromEvent";
+import Provider from "../../src/components/Provider";
 
 import mockKeymap from "../__mocks__/keymap";
 
@@ -20,60 +22,30 @@ class MockProvider extends Component {
     );
   }
 }
-class MockGlobalProvider extends Component {
-  onKeyDown(event) {
-    for (let key in this.props.globalFunctions) {
-      const { name } = this.props.globalFunctions[key];
-      const action = getActionFromEvent(mockKeymap[name], event);
-      if (action) {
-        const { handler } = this.props.globalFunctions[key];
-        handler(action, event);
-      }
-    }
-  }
-  render() {
-    return (
-      <div onKeyDown={this.onKeyDown.bind(this)}>
-        <ContextProvider
-          value={{
-            shortcuts: mockKeymap,
-            globalFunctions: this.props.globalFunctions || {}
-          }}
-        >
-          {Children.only(this.props.children)}
-        </ContextProvider>
-      </div>
-    );
-  }
-}
-
 describe("Shortcuts", () => {
   afterEach(cleanup);
+  it("should throw when name or handler props are missing", () => {
+    const spy = jest.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      expect(() =>
+        render(
+          <MockProvider>
+            <Shortcuts />
+          </MockProvider>
+        )
+      ).toThrow();
+    } finally {
+      spy.mockRestore();
+    }
+  });
   describe("should render a div", () => {
     afterEach(cleanup);
-    it("with warnings when there are no props", () => {
-      const spy = jest.spyOn(console, "error").mockImplementation(() => {});
-      try {
-        const { container } = render(
-          <MockProvider>
-            <Shortcuts /* name="" handler={jest.fn()} */ />
-          </MockProvider>
-        );
-        expect([].slice.call(container.querySelectorAll("div"))).toHaveLength(
-          1
-        );
-        // 2 required props are missing
-        expect(spy).toHaveBeenCalledTimes(2);
-      } finally {
-        spy.mockRestore();
-      }
-    });
 
     it("and pass any additional props to the div element", () => {
       const obj = { a: "test", b: "qwerty", c: {}, tabIndex: 5 };
       const { container } = render(
         <MockProvider>
-          <Shortcuts {...obj} />
+          <Shortcuts {...obj} name="TEST" handler={jest.fn()} />
         </MockProvider>
       );
       const domEl = container.querySelector("div");
@@ -88,7 +60,7 @@ describe("Shortcuts", () => {
       const ref = createRef();
       const { container } = render(
         <MockProvider>
-          <Shortcuts ref={ref} />
+          <Shortcuts name="TEST" handler={jest.fn()} ref={ref} />
         </MockProvider>
       );
       const domEl = container.querySelector("div");
@@ -108,6 +80,8 @@ describe("Shortcuts", () => {
     fireEvent.keyDown(getByText(/^test/), { keyCode: 38 });
     expect(spy).toHaveBeenCalledTimes(1);
     fireEvent.keyDown(getByText(/^test/), { keyCode: 39 });
+    expect(spy).toHaveBeenCalledTimes(2);
+    fireEvent.keyDown(getByText(/^test/), { keyCode: 39, shiftKey: true });
     expect(spy).toHaveBeenCalledTimes(2);
     fireEvent.keyDown(getByText(/^test/), { keyCode: 50 });
     expect(spy).toHaveBeenCalledTimes(2);
@@ -137,9 +111,8 @@ describe("Shortcuts", () => {
 
   it("should call handler on keydown on any child for global", () => {
     const spy = jest.fn();
-    const testObj = {};
     const { getByText } = render(
-      <MockGlobalProvider globalFunctions={testObj}>
+      <Provider shortcuts={mockKeymap} withGlobals={true}>
         <div>
           <div>test</div>
           <div>2nd Child</div>
@@ -147,7 +120,7 @@ describe("Shortcuts", () => {
             <div>Inner Child</div>
           </Shortcuts>
         </div>
-      </MockGlobalProvider>
+      </Provider>
     );
     fireEvent.keyDown(getByText(/^test/), { keyCode: 38 });
     expect(spy).toHaveBeenCalledTimes(1);

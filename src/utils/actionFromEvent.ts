@@ -13,8 +13,8 @@ export default function getActionFromEvent(
   if (typeof actions !== "object") return null;
   for (let key in actions) {
     if (Array.isArray(actions[key])) {
-      for (let action of actions[key]) {
-        if (areEventsEqual(action, event)) return key;
+      for (let k in actions[key]) {
+        if (areEventsEqual(actions[key][k], event)) return key;
       }
     } else if (areEventsEqual(actions[key], event)) return key;
   }
@@ -27,7 +27,10 @@ export default function getActionFromEvent(
  * @param {KeyboardEvent} event
  * @returns {Boolean}
  */
-export function areEventsEqual(accelerator: string, event: KeyboardEvent) {
+export function areEventsEqual(
+  accelerator: string,
+  event: KeyboardEvent
+): boolean {
   const keys = accelerator
     .toUpperCase()
     .split("+")

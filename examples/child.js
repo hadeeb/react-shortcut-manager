@@ -13,7 +13,7 @@ class ChildComponent extends Component {
     };
     this.handle_keys = this.handle_keys.bind(this);
   }
-  handle_keys(action, event) {
+  handle_keys(action) {
     this.setState(function(prev) {
       return { letter: action, count: prev.count + 1 };
     });
@@ -27,10 +27,33 @@ class ChildComponent extends Component {
         <div>{this.state.letter}</div>
         <input />
         <TestComp />
-        <ArrowNav />
+        <ArrowList />
       </Shortcuts>
     );
   }
 }
 
 export default ChildComponent;
+
+const list = ["Apple", "HP", "Dell", "Lenovo", "Epson"];
+
+const ArrowList = () => (
+  <ArrowNav>
+    {list.map(item => (
+      <Item key={item} onClick={() => console.log(item)}>
+        {item}
+      </Item>
+    ))}
+  </ArrowNav>
+);
+
+const Item = ({ tabIndex, children, onClick }) => (
+  <Shortcuts
+    name="GLO"
+    handler={(action, event) => event.stopPropagation()}
+    tabIndex={tabIndex}
+    onClick={onClick}
+  >
+    {children}
+  </Shortcuts>
+);

@@ -5,6 +5,7 @@ import React, {
   KeyboardEvent,
   Children
 } from "react";
+
 import invariant from "invariant";
 
 import getActionFromEvent from "../utils/actionFromEvent";
@@ -13,20 +14,30 @@ import isInputLike from "../utils/isInputLike";
 
 import { ContextConsumer, contextType } from "./Context";
 
-interface ShortcutsProps {
+export type handlerFunction = (
+  action?: string,
+  event?: React.KeyboardEvent<HTMLElement>
+) => void;
+
+export type options = {
+  stopPropagation?: boolean;
+  preventDefault?: boolean;
+  alwaysFire?: boolean;
+};
+
+type ShortcutsProps = {
   name: string;
-  handler: (action?: string, event?: React.KeyboardEvent<HTMLElement>) => void;
-  global: boolean;
-  headless: boolean;
-  tabIndex: number;
-  stopPropagation: boolean;
-  preventDefault: boolean;
-  alwaysFire: boolean;
-  forwardedRef: Ref<HTMLDivElement>;
-}
+  handler: handlerFunction;
+  global?: boolean;
+  headless?: boolean;
+  tabIndex?: number;
+};
 
-interface InternalProps extends ShortcutsProps, contextType {}
-
+type InternalProps = ShortcutsProps &
+  contextType &
+  options & {
+    forwardedRef: Ref<HTMLDivElement>;
+  };
 class Shortcuts extends PureComponent<InternalProps> {
   actions: Object;
   uniqueID: string;
@@ -42,22 +53,21 @@ class Shortcuts extends PureComponent<InternalProps> {
 
   constructor(props: InternalProps) {
     super(props);
-    const { name, global, shortcuts, globalFunctions } = props;
-    this.actions = shortcuts[name] || "";
+    const { name, handler, global, shortcuts, globalFunctions } = props;
+    invariant(
+      name && handler,
+      `name and handler props should have valid values`
+    );
+    this.actions = shortcuts[name] || {};
     this.shortcutsHandler = this.shortcutsHandler.bind(this);
     this.uniqueID = uniqueID(name);
     invariant(
       !global || globalFunctions,
       `To use global shortcuts,` +
-        ` The root Provider component should have a prop withGlobal={true}`
+        ` The root Provider component should have a prop withGlobals={true}`
     );
     if (global) {
-      const {
-        handler,
-        stopPropagation,
-        preventDefault,
-        alwaysFire
-      } = this.props;
+      const { stopPropagation, preventDefault, alwaysFire } = props;
       globalFunctions[this.uniqueID] = {
         name: name,
         handler: handler,
@@ -77,7 +87,6 @@ class Shortcuts extends PureComponent<InternalProps> {
    * @param {KeyboardEvent} event
    */
   shortcutsHandler(event: KeyboardEvent<HTMLDivElement>) {
-    if (typeof this.actions !== "object") return;
     const action = getActionFromEvent(this.actions, event);
     if (action) {
       const {
@@ -129,19 +138,21 @@ class Shortcuts extends PureComponent<InternalProps> {
   }
 }
 
-export default forwardRef<HTMLDivElement, ShortcutsProps>((props, ref) => {
-  return (
-    <ContextConsumer>
-      {({ shortcuts, globalFunctions }) => (
-        <Shortcuts
-          {...props}
-          forwardedRef={ref}
-          shortcuts={shortcuts}
-          globalFunctions={globalFunctions}
-        >
-          {props.children}
-        </Shortcuts>
-      )}
-    </ContextConsumer>
-  );
-});
+export default forwardRef<HTMLDivElement, ShortcutsProps & options>(
+  (props, ref) => {
+    return (
+      <ContextConsumer>
+        {({ shortcuts, globalFunctions }) => (
+          <Shortcuts
+            {...props}
+            forwardedRef={ref}
+            shortcuts={shortcuts}
+            globalFunctions={globalFunctions}
+          >
+            {props.children}
+          </Shortcuts>
+        )}
+      </ContextConsumer>
+    );
+  }
+);

@@ -1,4 +1,4 @@
-import React, { Component, Children, KeyboardEvent } from "react";
+import React, { Component, Children, KeyboardEvent, HTMLProps } from "react";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
@@ -9,13 +9,12 @@ import { ContextProvider } from "./Context";
 import { Keymap } from "../utils/types";
 import { contextType, globalFunctionsType } from "./Context";
 
-interface ProviderProps {
+export type ProviderProps = {
   shortcuts: Keymap;
-  withGlobals: boolean;
-  tabIndex: number;
-}
+  withGlobals?: boolean;
+};
 
-class Provider extends Component<ProviderProps> {
+class Provider extends Component<ProviderProps & HTMLProps<HTMLDivElement>> {
   shortcuts: Keymap;
   globalFunctions: globalFunctionsType;
   contextValue: contextType;
@@ -62,19 +61,19 @@ class Provider extends Component<ProviderProps> {
   }
 
   render() {
-    const { withGlobals, shortcuts, tabIndex, ...rest } = this.props;
+    const { withGlobals, shortcuts, tabIndex, children, ...rest } = this.props;
     if (withGlobals) {
       return (
-        <div {...rest} tabIndex={tabIndex} onKeyDown={this.handleGlobals}>
-          <ContextProvider value={this.contextValue}>
-            {Children.only(this.props.children)}
-          </ContextProvider>
-        </div>
+        <ContextProvider value={this.contextValue}>
+          <div {...rest} tabIndex={tabIndex} onKeyDown={this.handleGlobals}>
+            {Children.only(children)}
+          </div>
+        </ContextProvider>
       );
     }
     return (
       <ContextProvider value={this.contextValue}>
-        {Children.only(this.props.children)}
+        {Children.only(children)}
       </ContextProvider>
     );
   }
