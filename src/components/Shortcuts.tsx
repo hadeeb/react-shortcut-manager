@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   Ref,
   KeyboardEvent,
+  ReactNode,
   Children
 } from "react";
 
@@ -15,8 +16,8 @@ import isInputLike from "../utils/isInputLike";
 import { ContextConsumer, contextType } from "./Context";
 
 export type handlerFunction = (
-  action?: string,
-  event?: React.KeyboardEvent<HTMLElement>
+  action: string,
+  event: KeyboardEvent<HTMLElement>
 ) => void;
 
 export type options = {
@@ -28,6 +29,7 @@ export type options = {
 type ShortcutsProps = {
   name: string;
   handler: handlerFunction;
+  children: ReactNode;
   global?: boolean;
   headless?: boolean;
   tabIndex?: number;

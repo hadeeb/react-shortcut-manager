@@ -8,7 +8,7 @@ import Provider from "../../src/components/Provider";
 
 import mockKeymap from "../__mocks__/keymap";
 
-class MockProvider extends Component {
+export class MockProvider extends Component {
   render() {
     return (
       <ContextProvider

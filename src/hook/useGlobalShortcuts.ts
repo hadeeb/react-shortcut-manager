@@ -7,10 +7,11 @@ import context from "../components/Context";
 import { handlerFunction, options } from "../components/Shortcuts";
 
 export default function useGlobalShortcuts(
-  name?: string,
-  handler?: handlerFunction,
+  name: string,
+  handler: handlerFunction,
   options?: options
 ) {
+  invariant(name && handler, `name and handler props should have valid values`);
   const { globalFunctions } = useContext(context);
   invariant(
     globalFunctions,

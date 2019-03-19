@@ -1,4 +1,10 @@
-import React, { Component, Children, KeyboardEvent, HTMLProps } from "react";
+import React, {
+  Component,
+  Children,
+  KeyboardEvent,
+  ReactNode,
+  HTMLProps
+} from "react";
 
 import getActionFromEvent from "../utils/actionFromEvent";
 import getShortcutsofPlatform from "../utils/getShortcutsofPlatform";
@@ -11,6 +17,7 @@ import { contextType, globalFunctionsType } from "./Context";
 
 export type ProviderProps = {
   shortcuts: Keymap;
+  children: ReactNode;
   withGlobals?: boolean;
 };
 
