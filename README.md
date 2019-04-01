@@ -137,7 +137,6 @@ class TodoList extends React.Component{
 ### Notes
 
 - Take care of tabIndex and focus style of the components
-- Beware of `outline`
 - Any similarities to [`react-shortcuts`] is not accidental
 
 [`react-shortcuts`]: https://github.com/avocode/react-shortcuts
