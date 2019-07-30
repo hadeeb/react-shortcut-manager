@@ -1,5 +1,5 @@
-import React, { Component, Children, createRef } from "react";
-import { cleanup, render, fireEvent } from "react-testing-library";
+import React from "react";
+import { cleanup, render, fireEvent } from "@testing-library/react";
 
 import { MockProvider } from "../components/Shortcuts.test";
 import mockKeymap from "../__mocks__/keymap";

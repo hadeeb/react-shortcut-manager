@@ -1,5 +1,5 @@
 import React, { Component, Children, createRef } from "react";
-import { cleanup, render, fireEvent } from "react-testing-library";
+import { cleanup, render, fireEvent } from "@testing-library/react";
 
 import Shortcuts from "components/Shortcuts";
 
