@@ -60,7 +60,7 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.2",
+    "@babel/runtime": "^7.26.10",
     "invariant": "^2.2.4"
   },
   "peerDependencies": {
